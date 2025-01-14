@@ -8,6 +8,7 @@
     
   ];
   idx.previews = {
+    enable = true;
     previews = {
       web = {
         command = [
