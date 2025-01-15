@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musicapp_client/core/theme/theme.dart';
-import 'package:musicapp_client/features/auth/view/pages/signup_pages.dart';
+import 'package:musicapp_client/features/auth/view/pages/signup_page.dart';
 
 void main() {
   runApp(const MyApp());
