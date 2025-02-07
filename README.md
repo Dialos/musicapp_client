@@ -1,16 +1,15 @@
 # musicapp_client
 
-A new Flutter project.
+This is a full-stack music streaming application, similar to Spotify, built using the MVVM architecture. This architecture ensures scalability and maintainability of the app.
 
-## Getting Started
+Key Features:
+- Music Streaming: Stream music seamlessly.
+- User Account Management: Manage user accounts with ease.
+- Enhanced User Experience: Features include favorites, recently played songs, and background music playback.
 
-This project is a starting point for a Flutter application.
+App Structure: The application is divided into two main parts: the Frontend (client) and the Backend (server).
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Frontend Details:
+- Framework: Flutter is used for building the client-side of the application.
+- Local Data Storage: Hive is implemented for efficient local storage of data.
+- State Management: State management is handled using Riverpod Generators. This ensures efficient management of the app state, providing a seamless user experience by implementing features like persisting authentication state and fetching user data.
