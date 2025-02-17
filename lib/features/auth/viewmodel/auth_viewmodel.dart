@@ -1,5 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:musicapp_client/features/auth/model/user_model.dart';
+import 'package:musicapp_client/features/auth/repositories/auth_local_repository.dart';
 import 'package:musicapp_client/features/auth/repositories/auth_remote_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -7,11 +8,18 @@ part 'auth_viewmodel.g.dart';
 
 @riverpod
 class AuthViewmodel extends _$AuthViewmodel {
-  final AuthRemoteRepository _authRemoteRepository = AuthRemoteRepository();
+  late AuthRemoteRepository _authRemoteRepository;
+  late AuthLocalRepository _authLocalRepository;
 
   @override
   AsyncValue<UserModel>? build() {
+    _authRemoteRepository = ref.watch(authRemoteRepositoryProvider);
+    _authLocalRepository = ref.watch(authLocalRepositoryProvider);
     return null;
+  }
+
+  Future<void> initSharedPreferences() async {
+    await _authLocalRepository.init();
   }
 
   Future<void> signUpUser({
@@ -51,8 +59,30 @@ class AuthViewmodel extends _$AuthViewmodel {
           l.message,
           StackTrace.current,
         ),
-      Right(value: final r) => state = AsyncValue.data(r),
+      Right(value: final r) => _loginSuccess(r),
     };
     print(val);
+  }
+
+  AsyncValue<UserModel>? _loginSuccess(UserModel user) {
+    _authLocalRepository.setToken(user.token);
+    return state = AsyncValue.data(user);
+  }
+
+  Future<UserModel>? getData() async {
+    state = const AsyncValue.loading();
+    final token = _authLocalRepository.getToken();
+    if (token != null) {
+      final res = _authRemoteRepository.getCurrentUSerData(token);
+      final val = switch (res) {
+        Left(value: final l) => state = AsyncValue.error(
+            l.message,
+            StackTrace.current,
+          ),
+        Right(value: final r) => state = AsyncValue.data(r),
+      };
+      return val.value;
+    }
+    return null;
   }
 }
