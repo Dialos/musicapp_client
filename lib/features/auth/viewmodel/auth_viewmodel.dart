@@ -69,11 +69,11 @@ class AuthViewmodel extends _$AuthViewmodel {
     return state = AsyncValue.data(user);
   }
 
-  Future<UserModel>? getData() async {
+  Future<UserModel?> getData() async {
     state = const AsyncValue.loading();
     final token = _authLocalRepository.getToken();
     if (token != null) {
-      final res = _authRemoteRepository.getCurrentUSerData(token);
+      final res = await _authRemoteRepository.getCurrentUSerData(token);
       final val = switch (res) {
         Left(value: final l) => state = AsyncValue.error(
             l.message,
