@@ -5,7 +5,7 @@ import 'package:musicapp_client/core/widgets/loader.dart';
 import 'package:musicapp_client/core/widgets/utils.dart';
 import 'package:musicapp_client/features/auth/view/pages/login_page.dart';
 import 'package:musicapp_client/features/auth/view/widgets/auth_gradient_button.dart';
-import 'package:musicapp_client/features/auth/view/widgets/custom_field.dart';
+import 'package:musicapp_client/core/widgets/custom_field.dart';
 import 'package:musicapp_client/features/auth/viewmodel/auth_viewmodel.dart';
 
 class SignupPage extends ConsumerStatefulWidget {
@@ -31,7 +31,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(authViewmodelProvider)?.isLoading == true;
+    final isLoading = ref.watch(authViewmodelProvider.select((value) => value?.isLoading == true));
 
     ref.listen(
       authViewmodelProvider,
@@ -112,6 +112,8 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                                   email: emailController.text,
                                   password: pwController.text,
                                   name: nameController.text);
+                        } else {
+                          showSnackBar(context, "Missing fields!");
                         }
                       },
                     ),

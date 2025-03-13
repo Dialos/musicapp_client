@@ -5,8 +5,9 @@ import 'package:musicapp_client/core/widgets/loader.dart';
 import 'package:musicapp_client/core/widgets/utils.dart';
 import 'package:musicapp_client/features/auth/view/pages/signup_page.dart';
 import 'package:musicapp_client/features/auth/view/widgets/auth_gradient_button.dart';
-import 'package:musicapp_client/features/auth/view/widgets/custom_field.dart';
+import 'package:musicapp_client/core/widgets/custom_field.dart';
 import 'package:musicapp_client/features/auth/viewmodel/auth_viewmodel.dart';
+import 'package:musicapp_client/features/home/view/pages/home_page.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -29,18 +30,19 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(authViewmodelProvider)?.isLoading == true;
+    final isLoading = ref.watch(authViewmodelProvider.select((value) => value?.isLoading == true));
 
     ref.listen(
       authViewmodelProvider,
       (_, next) {
         next?.when(
             data: (data) {
-              Navigator.push(
+              Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const LoginPage(),
+                  builder: (context) => const HomePage(),
                 ),
+                (_) => false,
               );
             },
             error: (error, st) {
@@ -99,6 +101,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 email: emailController.text,
                                 password: pwController.text,
                               );
+                        } else {
+                          showSnackBar(
+                            context,
+                            "Missing fields!",
+                          );
                         }
                       },
                     ),
