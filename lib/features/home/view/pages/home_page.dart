@@ -8,7 +8,22 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserNotifierProvider);
-    
-    return Scaffold();
+
+    return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(items: [
+        BottomNavigationBarItem(
+          icon: Image.asset('assets/images/home_filled.png'),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Image.asset('assets/images/library.png'),
+          label: 'Library',
+        ),
+        BottomNavigationBarItem(
+          icon: Image.asset('assets/images/search_filled.png'),
+          label: 'Search',
+        ),
+      ]),
+    );
   }
 }
