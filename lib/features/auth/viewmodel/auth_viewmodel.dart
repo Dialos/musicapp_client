@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:musicapp_client/core/providers/current_user_notifier.dart';
-import 'package:musicapp_client/features/auth/model/user_model.dart';
+import 'package:musicapp_client/features/auth/models/user_model.dart';
 import 'package:musicapp_client/features/auth/repositories/auth_local_repository.dart';
 import 'package:musicapp_client/features/auth/repositories/auth_remote_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -91,7 +91,7 @@ class AuthViewmodel extends _$AuthViewmodel {
   }
 
   AsyncValue<UserModel> _getDataSuccess(UserModel user) {
-_currentUserNotifier.addUser(user);
+    _currentUserNotifier.addUser(user);
     return state = AsyncValue.data(user);
   }
 }

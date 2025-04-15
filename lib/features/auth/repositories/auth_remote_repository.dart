@@ -4,7 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:musicapp_client/core/constants/server_constant.dart';
 import 'package:musicapp_client/core/failure/failure.dart';
-import 'package:musicapp_client/features/auth/model/user_model.dart';
+import 'package:musicapp_client/features/auth/models/user_model.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

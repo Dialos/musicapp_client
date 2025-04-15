@@ -4,6 +4,7 @@ import 'package:musicapp_client/core/providers/current_user_notifier.dart';
 import 'package:musicapp_client/core/theme/color_palette.dart';
 import 'package:musicapp_client/features/home/view/pages/library_page.dart';
 import 'package:musicapp_client/features/home/view/pages/songs_page.dart';
+import 'package:musicapp_client/features/home/view/widgets/music_slab.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -25,7 +26,15 @@ class _HomePageState extends ConsumerState<HomePage> {
     //   final user = ref.watch(currentUserNotifierProvider);
 
     return Scaffold(
-      body: pages[selectedIndex],
+      body: Stack(
+        children: [
+          pages[selectedIndex],
+          const Positioned(
+            bottom: 0,
+            child: MusicSlab(),
+          ),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: selectedIndex,
           onTap: (value) {
