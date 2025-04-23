@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:musicapp_client/core/providers/current_user_notifier.dart';
-import 'package:musicapp_client/features/auth/models/user_model.dart';
+import 'package:musicapp_client/core/models/user_model.dart';
 import 'package:musicapp_client/features/auth/repositories/auth_local_repository.dart';
 import 'package:musicapp_client/features/auth/repositories/auth_remote_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

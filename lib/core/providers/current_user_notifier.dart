@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:musicapp_client/features/auth/models/user_model.dart';
+import 'package:musicapp_client/core/models/user_model.dart';
 
 part 'current_user_notifier.g.dart';
 
