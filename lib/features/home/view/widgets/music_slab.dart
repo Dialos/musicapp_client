@@ -5,6 +5,7 @@ import 'package:musicapp_client/core/providers/current_song_notifier.dart';
 import 'package:musicapp_client/core/theme/color_palette.dart';
 import 'package:musicapp_client/core/widgets/utils.dart';
 import 'package:musicapp_client/features/home/view/widgets/music_player.dart';
+import 'package:musicapp_client/features/home/viewmodel/home_viewmodel.dart';
 
 class MusicSlab extends ConsumerWidget {
   const MusicSlab({super.key});
@@ -99,7 +100,11 @@ class MusicSlab extends ConsumerWidget {
                 Row(
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        await ref
+                            .read(homeViewmodelProvider.notifier)
+                            .favSong(songId: currentSong.id);
+                      },
                       icon:
                           Icon(CupertinoIcons.heart, color: Palette.whiteColor),
                     ),
