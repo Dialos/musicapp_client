@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:musicapp_client/core/constants/server_constant.dart';
@@ -11,7 +12,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'home_repository.g.dart';
 
 @riverpod
-HomeRepository homeRepository(HomeRepositoryRef ref) {
+HomeRepository homeRepository(Ref ref) {
   return HomeRepository();
 }
 

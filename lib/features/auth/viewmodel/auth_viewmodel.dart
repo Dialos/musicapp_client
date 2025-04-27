@@ -63,7 +63,6 @@ class AuthViewmodel extends _$AuthViewmodel {
         ),
       Right(value: final r) => _loginSuccess(r),
     };
-    print(val);
   }
 
   AsyncValue<UserModel>? _loginSuccess(UserModel user) {

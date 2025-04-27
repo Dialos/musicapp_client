@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:musicapp_client/features/home/models/song_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -6,7 +7,7 @@ part 'home_local_repository.g.dart';
 
 @riverpod
 HomeLocalRepository homeLocalRepository(
-  HomeLocalRepositoryRef ref,
+  Ref ref,
 ) {
   return HomeLocalRepository();
 }
