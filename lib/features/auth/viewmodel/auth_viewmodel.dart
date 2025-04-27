@@ -44,7 +44,6 @@ class AuthViewmodel extends _$AuthViewmodel {
         ),
       Right(value: final r) => state = AsyncValue.data(r),
     };
-    print(val);
   }
 
   Future<void> loginUser({

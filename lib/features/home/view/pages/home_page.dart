@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:musicapp_client/core/providers/current_user_notifier.dart';
 import 'package:musicapp_client/core/theme/color_palette.dart';
 import 'package:musicapp_client/features/home/view/pages/library_page.dart';
 import 'package:musicapp_client/features/home/view/pages/songs_page.dart';

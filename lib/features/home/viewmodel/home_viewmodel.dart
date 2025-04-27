@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:musicapp_client/core/providers/current_user_notifier.dart';
 import 'package:musicapp_client/core/widgets/utils.dart';
@@ -13,7 +14,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'home_viewmodel.g.dart';
 
 @riverpod
-Future<List<SongModel>> getAllSongs(GetAllSongsRef ref) async {
+Future<List<SongModel>> getAllSongs(Ref ref) async {
   final token =
       ref.watch(currentUserNotifierProvider.select((user) => user!.token));
   final res = await ref.watch(homeRepositoryProvider).getAllSongs(
@@ -27,7 +28,7 @@ Future<List<SongModel>> getAllSongs(GetAllSongsRef ref) async {
 }
 
 @riverpod
-Future<List<SongModel>> getFavSongs(GetFavSongsRef ref) async {
+Future<List<SongModel>> getFavSongs(Ref ref) async {
   final token =
       ref.watch(currentUserNotifierProvider.select((user) => user!.token));
   final res = await ref.watch(homeRepositoryProvider).getFavSongs(
