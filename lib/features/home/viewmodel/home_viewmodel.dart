@@ -14,7 +14,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'home_viewmodel.g.dart';
 
 @riverpod
-Future<List<SongModel>> getAllSongs(GetAllSongsRef ref) async {
+Future<List<SongModel>> getAllSongs(Ref ref) async {
   final token =
       ref.watch(currentUserNotifierProvider.select((user) => user!.token));
   final res = await ref.watch(homeRepositoryProvider).getAllSongs(
@@ -28,7 +28,7 @@ Future<List<SongModel>> getAllSongs(GetAllSongsRef ref) async {
 }
 
 @riverpod
-Future<List<SongModel>> getFavSongs(GetFavSongsRef ref) async {
+Future<List<SongModel>> getFavSongs(Ref ref) async {
   final token =
       ref.watch(currentUserNotifierProvider.select((user) => user!.token));
   final res = await ref.watch(homeRepositoryProvider).getFavSongs(
@@ -75,7 +75,6 @@ class HomeViewModel extends _$HomeViewModel {
           AsyncValue.error(l.message, StackTrace.current),
       Right(value: final r) => state = AsyncValue.data(r),
     };
-    print(val);
   }
 
   List<SongModel> getRecentlyPlayedSongs() {
@@ -94,7 +93,6 @@ class HomeViewModel extends _$HomeViewModel {
           AsyncValue.error(l.message, StackTrace.current),
       Right(value: final r) => _favSongSuccess(r, songId),
     };
-    print(val);
   }
 
   AsyncValue _favSongSuccess(bool isFavorited, String songId) {

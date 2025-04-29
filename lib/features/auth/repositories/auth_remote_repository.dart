@@ -11,7 +11,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'auth_remote_repository.g.dart';
 
 @riverpod
-AuthRemoteRepository authRemoteRepository(AuthRemoteRepositoryRef ref) {
+AuthRemoteRepository authRemoteRepository(Ref ref) {
   return AuthRemoteRepository();
 }
 

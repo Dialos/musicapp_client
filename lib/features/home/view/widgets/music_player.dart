@@ -145,7 +145,7 @@ class MusicPlayer extends ConsumerWidget {
                               data: SliderTheme.of(context).copyWith(
                                 activeTrackColor: Palette.whiteColor,
                                 inactiveTrackColor:
-                                    Palette.whiteColor.withOpacity(0.117),
+                                    Palette.whiteColor.withValues(alpha: 0.117),
                                 thumbColor: Palette.whiteColor,
                                 trackHeight: 4,
                                 overlayShape: SliderComponentShape.noOverlay,

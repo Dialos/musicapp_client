@@ -31,6 +31,7 @@ class LibraryPage extends ConsumerWidget {
                       backgroundColor: Palette.backgroundColor,
                       child: Icon(
                         CupertinoIcons.plus,
+                        color: Palette.whiteColor,
                       ),
                     ),
                     title: const Text(
