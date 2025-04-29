@@ -25,7 +25,7 @@ class FavSongModel {
   }
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'id': id,
       'song_id': song_id,
       'user_id': user_id,
@@ -34,27 +34,26 @@ class FavSongModel {
 
   factory FavSongModel.fromMap(Map<String, dynamic> map) {
     return FavSongModel(
-      id: map['id'] ?? '',
-      song_id: map['song_id'] ?? '',
-      user_id: map['user_id'] ?? '',
+      id: map['id'] as String,
+      song_id: map['song_id'] as String,
+      user_id: map['user_id'] as String,
     );
   }
 
   String toJson() => json.encode(toMap());
 
   factory FavSongModel.fromJson(String source) =>
-      FavSongModel.fromMap(json.decode(source));
+      FavSongModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() =>
       'FavSongModel(id: $id, song_id: $song_id, user_id: $user_id)';
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(covariant FavSongModel other) {
     if (identical(this, other)) return true;
 
-    return other is FavSongModel &&
-        other.id == id &&
+    return other.id == id &&
         other.song_id == song_id &&
         other.user_id == user_id;
   }

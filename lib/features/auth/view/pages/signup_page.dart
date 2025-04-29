@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:musicapp_client/core/theme/color_palette.dart';
 import 'package:musicapp_client/core/widgets/loader.dart';
-import 'package:musicapp_client/core/widgets/utils.dart';
+import 'package:musicapp_client/core/utils.dart';
 import 'package:musicapp_client/features/auth/view/pages/login_page.dart';
 import 'package:musicapp_client/features/auth/view/widgets/auth_gradient_button.dart';
 import 'package:musicapp_client/core/widgets/custom_field.dart';
@@ -18,44 +18,43 @@ class SignupPage extends ConsumerStatefulWidget {
 class _SignupPageState extends ConsumerState<SignupPage> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
-  final pwController = TextEditingController();
+  final passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
     nameController.dispose();
     emailController.dispose();
-    pwController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(authViewmodelProvider.select((value) => value?.isLoading == true));
+    final isLoading = ref
+        .watch(authViewModelProvider.select((val) => val?.isLoading == true));
 
     ref.listen(
-      authViewmodelProvider,
+      authViewModelProvider,
       (_, next) {
         next?.when(
-            data: (data) {
-              showSnackBar(
-                context,
-                'Account created successfully! Please login.',
-              );
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LoginPage(),
-                ),
-              );
-            },
-            error: (error, st) {
-              showSnackBar(
-                context,
-                error.toString(),
-              );
-            },
-            loading: () {});
+          data: (data) {
+            showSnackBar(
+              context,
+              'Account created successfully! Please  login.',
+            );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const LoginPage(),
+              ),
+            );
+          },
+          error: (error, st) {
+            showSnackBar(context, error.toString());
+          },
+          loading: () {},
+        );
       },
     );
 
@@ -71,55 +70,46 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      "Sign Up.",
+                      'Sign Up.',
                       style: TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(
-                      height: 30,
-                    ),
+                    const SizedBox(height: 30),
                     CustomField(
-                      hintText: "Name",
+                      hintText: 'Name',
                       controller: nameController,
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
+                    const SizedBox(height: 15),
                     CustomField(
-                      hintText: "Email",
+                      hintText: 'Email',
                       controller: emailController,
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
+                    const SizedBox(height: 15),
                     CustomField(
-                      hintText: "Password",
-                      controller: pwController,
-                      isObscuredText: true,
+                      hintText: 'Password',
+                      controller: passwordController,
+                      isObscureText: true,
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 20),
                     AuthGradientButton(
-                      buttonText: "Sign up",
+                      buttonText: 'Sign up',
                       onTap: () async {
                         if (formKey.currentState!.validate()) {
                           await ref
-                              .read(authViewmodelProvider.notifier)
+                              .read(authViewModelProvider.notifier)
                               .signUpUser(
-                                  email: emailController.text,
-                                  password: pwController.text,
-                                  name: nameController.text);
+                                name: nameController.text,
+                                email: emailController.text,
+                                password: passwordController.text,
+                              );
                         } else {
-                          showSnackBar(context, "Missing fields!");
+                          showSnackBar(context, 'Missing fields!');
                         }
                       },
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 20),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -131,11 +121,11 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                       },
                       child: RichText(
                         text: TextSpan(
-                          text: "Already have an account? ",
+                          text: 'Already have an account? ',
                           style: Theme.of(context).textTheme.titleMedium,
-                          children: [
+                          children: const [
                             TextSpan(
-                              text: "Sign In",
+                              text: 'Sign In',
                               style: TextStyle(
                                 color: Palette.gradient2,
                                 fontWeight: FontWeight.bold,
@@ -144,7 +134,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                           ],
                         ),
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),

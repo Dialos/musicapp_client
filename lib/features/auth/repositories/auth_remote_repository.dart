@@ -11,7 +11,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'auth_remote_repository.g.dart';
 
 @riverpod
-AuthRemoteRepository authRemoteRepository(Ref ref) {
+AuthRemoteRepository authRemoteRepository(AuthRemoteRepositoryRef ref) {
   return AuthRemoteRepository();
 }
 
@@ -38,13 +38,13 @@ class AuthRemoteRepository {
         ),
       );
       final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
-      if (response.statusCode != 200) {
+
+      if (response.statusCode != 201) {
+        // {'detail': 'error message'}
         return Left(AppFailure(resBodyMap['detail']));
       }
 
-      return Right(
-        UserModel.fromMap(resBodyMap),
-      );
+      return Right(UserModel.fromMap(resBodyMap));
     } catch (e) {
       return Left(AppFailure(e.toString()));
     }
@@ -70,9 +70,11 @@ class AuthRemoteRepository {
         ),
       );
       final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
+
       if (response.statusCode != 200) {
         return Left(AppFailure(resBodyMap['detail']));
       }
+
       return Right(
         UserModel.fromMap(resBodyMap['user']).copyWith(
           token: resBodyMap['token'],
@@ -83,7 +85,7 @@ class AuthRemoteRepository {
     }
   }
 
-  Future<Either<AppFailure, UserModel>> getCurrentUSerData(String token) async {
+  Future<Either<AppFailure, UserModel>> getCurrentUserData(String token) async {
     try {
       final response = await http.get(
         Uri.parse(
@@ -95,9 +97,11 @@ class AuthRemoteRepository {
         },
       );
       final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
+
       if (response.statusCode != 200) {
         return Left(AppFailure(resBodyMap['detail']));
       }
+
       return Right(
         UserModel.fromMap(resBodyMap).copyWith(
           token: token,

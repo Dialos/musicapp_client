@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:musicapp_client/core/providers/current_song_notifier.dart';
 import 'package:musicapp_client/core/providers/current_user_notifier.dart';
 import 'package:musicapp_client/core/theme/color_palette.dart';
-import 'package:musicapp_client/core/widgets/utils.dart';
+import 'package:musicapp_client/core/utils.dart';
 import 'package:musicapp_client/features/home/view/widgets/music_player.dart';
 import 'package:musicapp_client/features/home/viewmodel/home_viewmodel.dart';
 
@@ -21,6 +21,7 @@ class MusicSlab extends ConsumerWidget {
     if (currentSong == null) {
       return const SizedBox();
     }
+
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
@@ -32,8 +33,11 @@ class MusicSlab extends ConsumerWidget {
                 (context, animation, secondaryAnimation, child) {
               final tween =
                   Tween(begin: const Offset(0, 1), end: Offset.zero).chain(
-                CurveTween(curve: Curves.easeIn),
+                CurveTween(
+                  curve: Curves.easeIn,
+                ),
               );
+
               final offsetAnimation = animation.drive(tween);
 
               return SlideTransition(
@@ -65,32 +69,31 @@ class MusicSlab extends ConsumerWidget {
                       child: Container(
                         width: 48,
                         decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                currentSong.thumbnail_url,
-                              ),
-                              fit: BoxFit.cover,
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              currentSong.thumbnail_url,
                             ),
-                            borderRadius: BorderRadius.circular(4)),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
                       ),
                     ),
-                    const SizedBox(
-                      width: 8,
-                    ),
+                    const SizedBox(width: 8),
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           currentSong.song_name,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         Text(
                           currentSong.artist,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: Palette.subtitleText,
@@ -104,9 +107,9 @@ class MusicSlab extends ConsumerWidget {
                   children: [
                     IconButton(
                       onPressed: () async {
-                        await ref
-                            .read(homeViewmodelProvider.notifier)
-                            .favSong(songId: currentSong.id);
+                        await ref.read(homeViewModelProvider.notifier).favSong(
+                              songId: currentSong.id,
+                            );
                       },
                       icon: Icon(
                         userFavorites
@@ -121,10 +124,11 @@ class MusicSlab extends ConsumerWidget {
                     IconButton(
                       onPressed: songNotifier.playPause,
                       icon: Icon(
-                          songNotifier.isPlaying
-                              ? CupertinoIcons.pause_fill
-                              : CupertinoIcons.play_fill,
-                          color: Palette.whiteColor),
+                        songNotifier.isPlaying
+                            ? CupertinoIcons.pause_fill
+                            : CupertinoIcons.play_fill,
+                        color: Palette.whiteColor,
+                      ),
                     ),
                   ],
                 )

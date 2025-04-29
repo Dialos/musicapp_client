@@ -37,7 +37,7 @@ class SongModel {
   }
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'id': id,
       'song_name': song_name,
       'artist': artist,
@@ -51,7 +51,7 @@ class SongModel {
     return SongModel(
       id: map['id'] ?? '',
       song_name: map['song_name'] ?? '',
-      artist: map['artist'] ?? '',
+      artist: map['artist'] as String,
       thumbnail_url: map['thumbnail_url'] ?? '',
       song_url: map['song_url'] ?? '',
       hex_code: map['hex_code'] ?? '',
@@ -61,19 +61,18 @@ class SongModel {
   String toJson() => json.encode(toMap());
 
   factory SongModel.fromJson(String source) =>
-      SongModel.fromMap(json.decode(source));
+      SongModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'SongModel(id: $id, song_name: $song_name, artist: $artist, thumbnail_url: $thumbnail_url, song_url: $song_url, hexCode: $hex_code)';
+    return 'SongModel(id: $id, song_name: $song_name, artist: $artist, thumbnail_url: $thumbnail_url, song_url: $song_url, hex_code: $hex_code)';
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(covariant SongModel other) {
     if (identical(this, other)) return true;
 
-    return other is SongModel &&
-        other.id == id &&
+    return other.id == id &&
         other.song_name == song_name &&
         other.artist == artist &&
         other.thumbnail_url == thumbnail_url &&

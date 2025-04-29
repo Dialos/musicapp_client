@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:musicapp_client/core/providers/current_song_notifier.dart';
 import 'package:musicapp_client/core/theme/color_palette.dart';
 import 'package:musicapp_client/core/widgets/loader.dart';
-import 'package:musicapp_client/core/widgets/utils.dart';
+import 'package:musicapp_client/core/utils.dart';
 import 'package:musicapp_client/features/home/viewmodel/home_viewmodel.dart';
 
 class SongsPage extends ConsumerWidget {
@@ -12,8 +12,9 @@ class SongsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final recentlyPlayedSongs =
-        ref.watch(homeViewmodelProvider.notifier).getRecentlyPlayedSongs();
+        ref.watch(homeViewModelProvider.notifier).getRecentlyPlayedSongs();
     final currentSong = ref.watch(currentSongNotifierProvider);
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 500),
       decoration: currentSong == null
@@ -26,21 +27,14 @@ class SongsPage extends ConsumerWidget {
                   hexToColor(currentSong.hex_code),
                   Palette.transparentColor,
                 ],
-                stops: const [
-                  0.0,
-                  0.3,
-                ],
+                stops: const [0.0, 0.3],
               ),
             ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(
-              left: 16,
-              right: 16,
-              bottom: 36,
-            ),
+            padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 36),
             child: SizedBox(
               height: 280,
               child: GridView.builder(
@@ -48,6 +42,7 @@ class SongsPage extends ConsumerWidget {
                   maxCrossAxisExtent: 200,
                   childAspectRatio: 3,
                   crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
                 ),
                 itemCount: recentlyPlayedSongs.length,
                 itemBuilder: (context, index) {
@@ -81,16 +76,15 @@ class SongsPage extends ConsumerWidget {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            width: 8,
-                          ),
+                          const SizedBox(width: 8),
                           Flexible(
                             child: Text(
                               song.song_name,
-                              style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w700,
-                                  overflow: TextOverflow.ellipsis),
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                               maxLines: 1,
                             ),
                           )
@@ -121,6 +115,7 @@ class SongsPage extends ConsumerWidget {
                       itemCount: songs.length,
                       itemBuilder: (context, index) {
                         final song = songs[index];
+
                         return GestureDetector(
                           onTap: () {
                             ref
@@ -142,12 +137,10 @@ class SongsPage extends ConsumerWidget {
                                       ),
                                       fit: BoxFit.cover,
                                     ),
-                                    borderRadius: BorderRadius.circular(7.0),
+                                    borderRadius: BorderRadius.circular(7),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
+                                const SizedBox(height: 5),
                                 SizedBox(
                                   width: 180,
                                   child: Text(

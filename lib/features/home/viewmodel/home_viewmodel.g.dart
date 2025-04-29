@@ -38,21 +38,21 @@ final getFavSongsProvider = AutoDisposeFutureProvider<List<SongModel>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetFavSongsRef = AutoDisposeFutureProviderRef<List<SongModel>>;
-String _$homeViewmodelHash() => r'c95aeda95421989b8c6717c5f8e18a7f160a8963';
+String _$homeViewModelHash() => r'6cf05ce57d5841404e742daaf6425c79a0258148';
 
-/// See also [HomeViewmodel].
-@ProviderFor(HomeViewmodel)
-final homeViewmodelProvider =
-    AutoDisposeNotifierProvider<HomeViewmodel, AsyncValue?>.internal(
-  HomeViewmodel.new,
-  name: r'homeViewmodelProvider',
+/// See also [HomeViewModel].
+@ProviderFor(HomeViewModel)
+final homeViewModelProvider =
+    AutoDisposeNotifierProvider<HomeViewModel, AsyncValue?>.internal(
+  HomeViewModel.new,
+  name: r'homeViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$homeViewmodelHash,
+      : _$homeViewModelHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$HomeViewmodel = AutoDisposeNotifier<AsyncValue?>;
+typedef _$HomeViewModel = AutoDisposeNotifier<AsyncValue?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -25,7 +25,7 @@ class CurrentSongNotifier extends _$CurrentSongNotifier {
     final audioSource = AudioSource.uri(
       Uri.parse(song.song_url),
       tag: MediaItem(
-        id: song.id.toString(),
+        id: song.id,
         title: song.song_name,
         artist: song.artist,
         artUri: Uri.parse(song.thumbnail_url),
@@ -42,7 +42,6 @@ class CurrentSongNotifier extends _$CurrentSongNotifier {
         this.state = this.state?.copyWith(hex_code: this.state?.hex_code);
       }
     });
-
     _homeLocalRepository.uploadLocalSong(song);
     audioPlayer!.play();
     isPlaying = true;

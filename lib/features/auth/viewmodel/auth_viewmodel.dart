@@ -8,7 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'auth_viewmodel.g.dart';
 
 @riverpod
-class AuthViewmodel extends _$AuthViewmodel {
+class AuthViewModel extends _$AuthViewModel {
   late AuthRemoteRepository _authRemoteRepository;
   late AuthLocalRepository _authLocalRepository;
   late CurrentUserNotifier _currentUserNotifier;
@@ -26,9 +26,9 @@ class AuthViewmodel extends _$AuthViewmodel {
   }
 
   Future<void> signUpUser({
+    required String name,
     required String email,
     required String password,
-    required String name,
   }) async {
     state = const AsyncValue.loading();
     final res = await _authRemoteRepository.signup(
@@ -44,6 +44,7 @@ class AuthViewmodel extends _$AuthViewmodel {
         ),
       Right(value: final r) => state = AsyncValue.data(r),
     };
+    print(val);
   }
 
   Future<void> loginUser({
@@ -63,6 +64,7 @@ class AuthViewmodel extends _$AuthViewmodel {
         ),
       Right(value: final r) => _loginSuccess(r),
     };
+    print(val);
   }
 
   AsyncValue<UserModel>? _loginSuccess(UserModel user) {
@@ -74,8 +76,9 @@ class AuthViewmodel extends _$AuthViewmodel {
   Future<UserModel?> getData() async {
     state = const AsyncValue.loading();
     final token = _authLocalRepository.getToken();
+
     if (token != null) {
-      final res = await _authRemoteRepository.getCurrentUSerData(token);
+      final res = await _authRemoteRepository.getCurrentUserData(token);
       final val = switch (res) {
         Left(value: final l) => state = AsyncValue.error(
             l.message,
@@ -83,8 +86,10 @@ class AuthViewmodel extends _$AuthViewmodel {
           ),
         Right(value: final r) => _getDataSuccess(r),
       };
+
       return val.value;
     }
+
     return null;
   }
 

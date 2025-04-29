@@ -12,33 +12,38 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'home_repository.g.dart';
 
 @riverpod
-HomeRepository homeRepository(Ref ref) {
+HomeRepository homeRepository(HomeRepositoryRef ref) {
   return HomeRepository();
 }
 
 class HomeRepository {
-  Future<Either<AppFailure, String>> uploadSong(
-      {required File selectedThumbnail,
-      required File selectedAudio,
-      required String artist,
-      required String songName,
-      required String hexCode,
-      required String token}) async {
+  Future<Either<AppFailure, String>> uploadSong({
+    required File selectedAudio,
+    required File selectedThumbnail,
+    required String songName,
+    required String artist,
+    required String hexCode,
+    required String token,
+  }) async {
     try {
       final request = http.MultipartRequest(
-          'POST', Uri.parse('${ServerConstant.serverURL}/song/upload'));
+        'POST',
+        Uri.parse('${ServerConstant.serverURL}/song/upload'),
+      );
 
       request
-        ..files.addAll([
-          await http.MultipartFile.fromPath('song', selectedAudio.path),
-          await http.MultipartFile.fromPath(
-              'thumbnail', selectedThumbnail.path),
-        ])
+        ..files.addAll(
+          [
+            await http.MultipartFile.fromPath('song', selectedAudio.path),
+            await http.MultipartFile.fromPath(
+                'thumbnail', selectedThumbnail.path),
+          ],
+        )
         ..fields.addAll(
           {
             'artist': artist,
             'song_name': songName,
-            'hex': hexCode,
+            'hex_code': hexCode,
           },
         )
         ..headers.addAll(
@@ -50,24 +55,18 @@ class HomeRepository {
       final res = await request.send();
 
       if (res.statusCode != 201) {
-        return Left(
-          AppFailure(
-            await res.stream.bytesToString(),
-          ),
-        );
+        return Left(AppFailure(await res.stream.bytesToString()));
       }
+
       return Right(await res.stream.bytesToString());
     } catch (e) {
-      return Left(
-        AppFailure(
-          e.toString(),
-        ),
-      );
+      return Left(AppFailure(e.toString()));
     }
   }
 
-  Future<Either<AppFailure, List<SongModel>>> getAllSongs(
-      {required String token}) async {
+  Future<Either<AppFailure, List<SongModel>>> getAllSongs({
+    required String token,
+  }) async {
     try {
       final res = await http
           .get(Uri.parse('${ServerConstant.serverURL}/song/list'), headers: {
@@ -78,11 +77,8 @@ class HomeRepository {
 
       if (res.statusCode != 200) {
         resBodyMap = resBodyMap as Map<String, dynamic>;
-        return Left(
-          AppFailure(resBodyMap['detail']),
-        );
+        return Left(AppFailure(resBodyMap['detail']));
       }
-
       resBodyMap = resBodyMap as List;
 
       List<SongModel> songs = [];
@@ -93,11 +89,7 @@ class HomeRepository {
 
       return Right(songs);
     } catch (e) {
-      return Left(
-        AppFailure(
-          e.toString(),
-        ),
-      );
+      return Left(AppFailure(e.toString()));
     }
   }
 
@@ -114,7 +106,7 @@ class HomeRepository {
         },
         body: jsonEncode(
           {
-            'song_id': songId,
+            "song_id": songId,
           },
         ),
       );
@@ -122,23 +114,18 @@ class HomeRepository {
 
       if (res.statusCode != 200) {
         resBodyMap = resBodyMap as Map<String, dynamic>;
-        return Left(
-          AppFailure(resBodyMap['detail']),
-        );
+        return Left(AppFailure(resBodyMap['detail']));
       }
 
       return Right(resBodyMap['message']);
     } catch (e) {
-      return Left(
-        AppFailure(
-          e.toString(),
-        ),
-      );
+      return Left(AppFailure(e.toString()));
     }
   }
 
-  Future<Either<AppFailure, List<SongModel>>> getFavSongs(
-      {required String token}) async {
+  Future<Either<AppFailure, List<SongModel>>> getFavSongs({
+    required String token,
+  }) async {
     try {
       final res = await http.get(
         Uri.parse('${ServerConstant.serverURL}/song/list/favorites'),
@@ -151,30 +138,19 @@ class HomeRepository {
 
       if (res.statusCode != 200) {
         resBodyMap = resBodyMap as Map<String, dynamic>;
-        return Left(
-          AppFailure(resBodyMap['detail']),
-        );
+        return Left(AppFailure(resBodyMap['detail']));
       }
-
       resBodyMap = resBodyMap as List;
 
       List<SongModel> songs = [];
 
       for (final map in resBodyMap) {
-        songs.add(
-          SongModel.fromMap(
-            map['song'],
-          ),
-        );
+        songs.add(SongModel.fromMap(map['song']));
       }
 
       return Right(songs);
     } catch (e) {
-      return Left(
-        AppFailure(
-          e.toString(),
-        ),
-      );
+      return Left(AppFailure(e.toString()));
     }
   }
 }

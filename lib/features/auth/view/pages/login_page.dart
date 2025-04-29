@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:musicapp_client/core/theme/color_palette.dart';
 import 'package:musicapp_client/core/widgets/loader.dart';
-import 'package:musicapp_client/core/widgets/utils.dart';
+import 'package:musicapp_client/core/utils.dart';
 import 'package:musicapp_client/features/auth/view/pages/signup_page.dart';
 import 'package:musicapp_client/features/auth/view/widgets/auth_gradient_button.dart';
 import 'package:musicapp_client/core/widgets/custom_field.dart';
@@ -18,40 +18,39 @@ class LoginPage extends ConsumerStatefulWidget {
 
 class _LoginPageState extends ConsumerState<LoginPage> {
   final emailController = TextEditingController();
-  final pwController = TextEditingController();
+  final passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
     emailController.dispose();
-    pwController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(authViewmodelProvider.select((value) => value?.isLoading == true));
+    final isLoading = ref
+        .watch(authViewModelProvider.select((val) => val?.isLoading == true));
 
     ref.listen(
-      authViewmodelProvider,
+      authViewModelProvider,
       (_, next) {
         next?.when(
-            data: (data) {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomePage(),
-                ),
-                (_) => false,
-              );
-            },
-            error: (error, st) {
-              showSnackBar(
-                context,
-                error.toString(),
-              );
-            },
-            loading: () {});
+          data: (data) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomePage(),
+              ),
+              (_) => false,
+            );
+          },
+          error: (error, st) {
+            showSnackBar(context, error.toString());
+          },
+          loading: () {},
+        );
       },
     );
 
@@ -67,51 +66,40 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      "Sign In.",
+                      'Sign In.',
                       style: TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(
-                      height: 30,
-                    ),
+                    const SizedBox(height: 30),
                     CustomField(
-                      hintText: "Email",
+                      hintText: 'Email',
                       controller: emailController,
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
+                    const SizedBox(height: 15),
                     CustomField(
-                      hintText: "Password",
-                      controller: pwController,
-                      isObscuredText: true,
+                      hintText: 'Password',
+                      controller: passwordController,
+                      isObscureText: true,
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 20),
                     AuthGradientButton(
-                      buttonText: "Sign in",
+                      buttonText: 'Sign in',
                       onTap: () async {
                         if (formKey.currentState!.validate()) {
                           await ref
-                              .read(authViewmodelProvider.notifier)
+                              .read(authViewModelProvider.notifier)
                               .loginUser(
                                 email: emailController.text,
-                                password: pwController.text,
+                                password: passwordController.text,
                               );
                         } else {
-                          showSnackBar(
-                            context,
-                            "Missing fields!",
-                          );
+                          showSnackBar(context, 'Missing fields!');
                         }
                       },
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 20),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -123,11 +111,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       },
                       child: RichText(
                         text: TextSpan(
-                          text: "Don't have an account? ",
+                          text: 'Don\'t have an account? ',
                           style: Theme.of(context).textTheme.titleMedium,
-                          children: [
+                          children: const [
                             TextSpan(
-                              text: "Sign Up",
+                              text: 'Sign Up',
                               style: TextStyle(
                                 color: Palette.gradient2,
                                 fontWeight: FontWeight.bold,
@@ -136,7 +124,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           ],
                         ),
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),

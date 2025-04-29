@@ -12,7 +12,7 @@ class LibraryPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(getAllSongsProvider).when(
+    return ref.watch(getFavSongsProvider).when(
           data: (data) {
             return ListView.builder(
               itemCount: data.length + 1,
@@ -42,8 +42,8 @@ class LibraryPage extends ConsumerWidget {
                     ),
                   );
                 }
-                final song = data[index];
 
+                final song = data[index];
                 return ListTile(
                   onTap: () {
                     ref
@@ -75,11 +75,9 @@ class LibraryPage extends ConsumerWidget {
               },
             );
           },
-          error: (error, stackTrace) {
+          error: (error, st) {
             return Center(
-              child: Text(
-                error.toString(),
-              ),
+              child: Text(error.toString()),
             );
           },
           loading: () => const Loader(),

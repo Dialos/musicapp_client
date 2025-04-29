@@ -5,7 +5,10 @@ import 'package:musicapp_client/core/theme/color_palette.dart';
 
 class AudioWave extends StatefulWidget {
   final String path;
-  const AudioWave({super.key, required this.path});
+  const AudioWave({
+    super.key,
+    required this.path,
+  });
 
   @override
   State<AudioWave> createState() => _AudioWaveState();
@@ -46,13 +49,15 @@ class _AudioWaveState extends State<AudioWave> {
       children: [
         IconButton(
           onPressed: playAndPause,
-          icon: Icon(playerController.playerState.isPlaying
-              ? CupertinoIcons.pause_solid
-              : CupertinoIcons.play_arrow_solid),
+          icon: Icon(
+            playerController.playerState.isPlaying
+                ? CupertinoIcons.pause_solid
+                : CupertinoIcons.play_arrow_solid,
+          ),
         ),
         Expanded(
           child: AudioFileWaveforms(
-            size: Size(double.infinity, 100),
+            size: const Size(double.infinity, 100),
             playerController: playerController,
             playerWaveStyle: const PlayerWaveStyle(
               fixedWaveColor: Palette.borderColor,

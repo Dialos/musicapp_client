@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:musicapp_client/core/providers/current_song_notifier.dart';
 import 'package:musicapp_client/core/providers/current_user_notifier.dart';
 import 'package:musicapp_client/core/theme/color_palette.dart';
-import 'package:musicapp_client/core/widgets/utils.dart';
+import 'package:musicapp_client/core/utils.dart';
 import 'package:musicapp_client/features/home/viewmodel/home_viewmodel.dart';
 
 class MusicPlayer extends ConsumerWidget {
@@ -14,20 +14,22 @@ class MusicPlayer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentSong = ref.watch(currentSongNotifierProvider);
     final songNotifier = ref.read(currentSongNotifierProvider.notifier);
+
     final userFavorites = ref
         .watch(currentUserNotifierProvider.select((data) => data!.favorites));
+
     return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            hexToColor(currentSong!.hex_code),
-            const Color(0xFF121212),
-          ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
+          colors: [
+            hexToColor(currentSong!.hex_code),
+            const Color(0xff121212),
+          ],
         ),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Scaffold(
         backgroundColor: Palette.transparentColor,
         appBar: AppBar(
@@ -42,7 +44,7 @@ class MusicPlayer extends ConsumerWidget {
                 Navigator.pop(context);
               },
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(10),
                 child: Image.asset(
                   'assets/images/pull-down-arrow.png',
                   color: Palette.whiteColor,
@@ -85,116 +87,116 @@ class MusicPlayer extends ConsumerWidget {
                           Text(
                             currentSong.song_name,
                             style: const TextStyle(
-                                color: Palette.whiteColor,
-                                fontSize: 24,
-                                fontWeight: FontWeight.w700),
+                              color: Palette.whiteColor,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                           Text(
                             currentSong.artist,
                             style: const TextStyle(
-                                color: Palette.subtitleText,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600),
+                              color: Palette.subtitleText,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ],
                       ),
                       const Expanded(child: SizedBox()),
                       IconButton(
-                          onPressed: () async {
-                            await ref
-                                .read(homeViewmodelProvider.notifier)
-                                .favSong(songId: currentSong.id);
-                          },
-                          icon: Icon(
-                            userFavorites
-                                    .where(
-                                        (fav) => fav.song_id == currentSong.id)
-                                    .toList()
-                                    .isNotEmpty
-                                ? CupertinoIcons.heart_fill
-                                : CupertinoIcons.heart,
-                            color: Palette.whiteColor,
-                          ))
+                        onPressed: () async {
+                          await ref
+                              .read(homeViewModelProvider.notifier)
+                              .favSong(
+                                songId: currentSong.id,
+                              );
+                        },
+                        icon: Icon(
+                          userFavorites
+                                  .where((fav) => fav.song_id == currentSong.id)
+                                  .toList()
+                                  .isNotEmpty
+                              ? CupertinoIcons.heart_fill
+                              : CupertinoIcons.heart,
+                          color: Palette.whiteColor,
+                        ),
+                      ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
+                  const SizedBox(height: 15),
                   StreamBuilder(
-                    stream: songNotifier.audioPlayer!.positionStream,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const SizedBox();
-                      }
-                      final position = snapshot.data;
-                      final duration = songNotifier.audioPlayer!.duration;
-                      double sliderValue = 0.0;
-                      if (position != null && duration != null) {
-                        sliderValue =
-                            position.inMilliseconds / duration.inMilliseconds;
-                      }
+                      stream: songNotifier.audioPlayer!.positionStream,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const SizedBox();
+                        }
+                        final position = snapshot.data;
+                        final duration = songNotifier.audioPlayer!.duration;
+                        double sliderValue = 0.0;
+                        if (position != null && duration != null) {
+                          sliderValue =
+                              position.inMilliseconds / duration.inMilliseconds;
+                        }
 
-                      return Column(
-                        children: [
-                          SliderTheme(
-                            data: SliderTheme.of(context).copyWith(
-                              activeTrackColor: Palette.whiteColor,
-                              inactiveTrackColor:
-                                  Palette.whiteColor.withValues(alpha: 0.117),
-                              thumbColor: Palette.whiteColor,
-                              trackHeight: 4,
-                              overlayShape: SliderComponentShape.noOverlay,
-                            ),
-                            child: Slider(
-                              value: sliderValue,
-                              min: 0,
-                              max: 1,
-                              onChanged: (val) {
-                                sliderValue = val;
-                              },
-                              onChangeEnd: songNotifier.seek,
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                '${position?.inMinutes}:${(position?.inSeconds ?? 0) < 10 ? '0${position?.inSeconds}' : position?.inSeconds}',
-                                style: TextStyle(
-                                  color: Palette.subtitleText,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w300,
-                                ),
+                        return Column(
+                          children: [
+                            SliderTheme(
+                              data: SliderTheme.of(context).copyWith(
+                                activeTrackColor: Palette.whiteColor,
+                                inactiveTrackColor:
+                                    Palette.whiteColor.withOpacity(0.117),
+                                thumbColor: Palette.whiteColor,
+                                trackHeight: 4,
+                                overlayShape: SliderComponentShape.noOverlay,
                               ),
-                              const Expanded(child: SizedBox()),
-                              Text(
-                                '${duration?.inMinutes}:${(duration?.inSeconds ?? 0) < 10 ? '0${duration?.inSeconds}' : duration?.inSeconds}',
-                                style: TextStyle(
-                                  color: Palette.subtitleText,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w300,
-                                ),
+                              child: Slider(
+                                value: sliderValue,
+                                min: 0,
+                                max: 1,
+                                onChanged: (val) {
+                                  sliderValue = val;
+                                },
+                                onChangeEnd: songNotifier.seek,
                               ),
-                            ],
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  '${position?.inMinutes}:${(position?.inSeconds ?? 0) < 10 ? '0${position?.inSeconds}' : position?.inSeconds}',
+                                  style: const TextStyle(
+                                    color: Palette.subtitleText,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                                const Expanded(child: SizedBox()),
+                                Text(
+                                  '${duration?.inMinutes}:${(duration?.inSeconds ?? 0) < 10 ? '0${duration?.inSeconds}' : duration?.inSeconds}',
+                                  style: const TextStyle(
+                                    color: Palette.subtitleText,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      }),
+                  const SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.all(10),
                         child: Image.asset(
                           'assets/images/shuffle.png',
                           color: Palette.whiteColor,
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.all(10),
                         child: Image.asset(
                           'assets/images/previus-song.png',
                           color: Palette.whiteColor,
@@ -211,14 +213,14 @@ class MusicPlayer extends ConsumerWidget {
                         color: Palette.whiteColor,
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.all(10),
                         child: Image.asset(
                           'assets/images/next-song.png',
                           color: Palette.whiteColor,
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.all(10),
                         child: Image.asset(
                           'assets/images/repeat.png',
                           color: Palette.whiteColor,
@@ -226,13 +228,11 @@ class MusicPlayer extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 25,
-                  ),
+                  const SizedBox(height: 25),
                   Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.all(10),
                         child: Image.asset(
                           'assets/images/connect-device.png',
                           color: Palette.whiteColor,
@@ -240,14 +240,14 @@ class MusicPlayer extends ConsumerWidget {
                       ),
                       const Expanded(child: SizedBox()),
                       Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.all(10),
                         child: Image.asset(
                           'assets/images/playlist.png',
                           color: Palette.whiteColor,
                         ),
                       ),
                     ],
-                  ),
+                  )
                 ],
               ),
             ),

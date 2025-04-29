@@ -7,7 +7,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:musicapp_client/core/theme/color_palette.dart';
 import 'package:musicapp_client/core/widgets/custom_field.dart';
 import 'package:musicapp_client/core/widgets/loader.dart';
-import 'package:musicapp_client/core/widgets/utils.dart';
+import 'package:musicapp_client/core/utils.dart';
 import 'package:musicapp_client/features/home/view/widgets/audio_wave.dart';
 import 'package:musicapp_client/features/home/viewmodel/home_viewmodel.dart';
 
@@ -15,15 +15,15 @@ class UploadSongPage extends ConsumerStatefulWidget {
   const UploadSongPage({super.key});
 
   @override
-  ConsumerState<UploadSongPage> createState() => _UploadSongPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _UploadSongPageState();
 }
 
 class _UploadSongPageState extends ConsumerState<UploadSongPage> {
   final songNameController = TextEditingController();
   final artistController = TextEditingController();
   Color selectedColor = Palette.cardColor;
-  File? selectedAudio;
   File? selectedImage;
+  File? selectedAudio;
   final formKey = GlobalKey<FormState>();
 
   void selectAudio() async {
@@ -54,7 +54,7 @@ class _UploadSongPageState extends ConsumerState<UploadSongPage> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref
-        .watch(homeViewmodelProvider.select((val) => val?.isLoading == true));
+        .watch(homeViewModelProvider.select((val) => val?.isLoading == true));
     return Scaffold(
       appBar: AppBar(
         title: const Text('Upload Song'),
@@ -64,14 +64,15 @@ class _UploadSongPageState extends ConsumerState<UploadSongPage> {
               if (formKey.currentState!.validate() &&
                   selectedAudio != null &&
                   selectedImage != null) {
-                ref.read(homeViewmodelProvider.notifier).uploadSong(
-                    selectedThumbnail: selectedImage!,
-                    selectedAudio: selectedAudio!,
-                    artist: artistController.text,
-                    songName: songNameController.text,
-                    selectedColor: selectedColor);
+                ref.read(homeViewModelProvider.notifier).uploadSong(
+                      selectedAudio: selectedAudio!,
+                      selectedThumbnail: selectedImage!,
+                      songName: songNameController.text,
+                      artist: artistController.text,
+                      selectedColor: selectedColor,
+                    );
               } else {
-                showSnackBar(context, 'Please fill all the fields');
+                showSnackBar(context, 'Missing fields!');
               }
             },
             icon: const Icon(Icons.check),
@@ -99,7 +100,8 @@ class _UploadSongPageState extends ConsumerState<UploadSongPage> {
                                     selectedImage!,
                                     fit: BoxFit.cover,
                                   ),
-                                ))
+                                ),
+                              )
                             : DottedBorder(
                                 color: Palette.borderColor,
                                 radius: const Radius.circular(10),
@@ -116,9 +118,7 @@ class _UploadSongPageState extends ConsumerState<UploadSongPage> {
                                         Icons.folder_open,
                                         size: 40,
                                       ),
-                                      SizedBox(
-                                        height: 15,
-                                      ),
+                                      SizedBox(height: 15),
                                       Text(
                                         'Select the thumbnail for your song',
                                         style: TextStyle(
@@ -130,6 +130,7 @@ class _UploadSongPageState extends ConsumerState<UploadSongPage> {
                                 ),
                               ),
                       ),
+                      const SizedBox(height: 40),
                       selectedAudio != null
                           ? AudioWave(path: selectedAudio!.path)
                           : CustomField(
@@ -138,23 +139,17 @@ class _UploadSongPageState extends ConsumerState<UploadSongPage> {
                               readOnly: true,
                               onTap: selectAudio,
                             ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20),
                       CustomField(
                         hintText: 'Artist',
                         controller: artistController,
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20),
                       CustomField(
                         hintText: 'Song Name',
                         controller: songNameController,
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20),
                       ColorPicker(
                         pickersEnabled: const {
                           ColorPickerType.wheel: true,

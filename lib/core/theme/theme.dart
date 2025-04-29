@@ -12,11 +12,12 @@ class AppTheme {
   static final darkThemeMode = ThemeData.dark().copyWith(
     scaffoldBackgroundColor: Palette.backgroundColor,
     inputDecorationTheme: InputDecorationTheme(
-      contentPadding: EdgeInsets.all(27),
+      contentPadding: const EdgeInsets.all(27),
       enabledBorder: _border(Palette.borderColor),
       focusedBorder: _border(Palette.gradient2),
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: Palette.backgroundColor),
+      backgroundColor: Palette.backgroundColor,
+    ),
   );
 }

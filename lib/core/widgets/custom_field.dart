@@ -3,11 +3,17 @@ import 'package:flutter/material.dart';
 class CustomField extends StatelessWidget {
   final String hintText;
   final TextEditingController? controller;
-  final bool isObscuredText;
+  final bool isObscureText;
   final bool readOnly;
   final VoidCallback? onTap;
-
-  const CustomField({super.key, required this.hintText, required this.controller, this.isObscuredText = false, this.readOnly = false, this.onTap});
+  const CustomField({
+    super.key,
+    required this.hintText,
+    required this.controller,
+    this.isObscureText = false,
+    this.readOnly = false,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +30,7 @@ class CustomField extends StatelessWidget {
         }
         return null;
       },
-      obscureText: isObscuredText,
+      obscureText: isObscureText,
     );
   }
 }

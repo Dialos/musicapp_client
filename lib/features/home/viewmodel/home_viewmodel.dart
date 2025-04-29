@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:musicapp_client/core/providers/current_user_notifier.dart';
-import 'package:musicapp_client/core/widgets/utils.dart';
+import 'package:musicapp_client/core/utils.dart';
 import 'package:musicapp_client/features/home/models/fav_song_model.dart';
 import 'package:musicapp_client/features/home/models/song_model.dart';
 import 'package:musicapp_client/features/home/repositories/home_local_repository.dart';
@@ -14,7 +14,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'home_viewmodel.g.dart';
 
 @riverpod
-Future<List<SongModel>> getAllSongs(Ref ref) async {
+Future<List<SongModel>> getAllSongs(GetAllSongsRef ref) async {
   final token =
       ref.watch(currentUserNotifierProvider.select((user) => user!.token));
   final res = await ref.watch(homeRepositoryProvider).getAllSongs(
@@ -28,7 +28,7 @@ Future<List<SongModel>> getAllSongs(Ref ref) async {
 }
 
 @riverpod
-Future<List<SongModel>> getFavSongs(Ref ref) async {
+Future<List<SongModel>> getFavSongs(GetFavSongsRef ref) async {
   final token =
       ref.watch(currentUserNotifierProvider.select((user) => user!.token));
   final res = await ref.watch(homeRepositoryProvider).getFavSongs(
@@ -42,7 +42,7 @@ Future<List<SongModel>> getFavSongs(Ref ref) async {
 }
 
 @riverpod
-class HomeViewmodel extends _$HomeViewmodel {
+class HomeViewModel extends _$HomeViewModel {
   late HomeRepository _homeRepository;
   late HomeLocalRepository _homeLocalRepository;
 
@@ -54,18 +54,18 @@ class HomeViewmodel extends _$HomeViewmodel {
   }
 
   Future<void> uploadSong({
-    required File selectedThumbnail,
     required File selectedAudio,
-    required String artist,
+    required File selectedThumbnail,
     required String songName,
+    required String artist,
     required Color selectedColor,
   }) async {
     state = const AsyncValue.loading();
     final res = await _homeRepository.uploadSong(
-      selectedThumbnail: selectedThumbnail,
       selectedAudio: selectedAudio,
-      artist: artist,
+      selectedThumbnail: selectedThumbnail,
       songName: songName,
+      artist: artist,
       hexCode: rgbToHex(selectedColor),
       token: ref.read(currentUserNotifierProvider)!.token,
     );
@@ -75,6 +75,7 @@ class HomeViewmodel extends _$HomeViewmodel {
           AsyncValue.error(l.message, StackTrace.current),
       Right(value: final r) => state = AsyncValue.data(r),
     };
+    print(val);
   }
 
   List<SongModel> getRecentlyPlayedSongs() {
@@ -93,6 +94,7 @@ class HomeViewmodel extends _$HomeViewmodel {
           AsyncValue.error(l.message, StackTrace.current),
       Right(value: final r) => _favSongSuccess(r, songId),
     };
+    print(val);
   }
 
   AsyncValue _favSongSuccess(bool isFavorited, String songId) {
@@ -116,7 +118,9 @@ class HomeViewmodel extends _$HomeViewmodel {
               favorites: ref
                   .read(currentUserNotifierProvider)!
                   .favorites
-                  .where((fav) => fav.song_id != songId)
+                  .where(
+                    (fav) => fav.song_id != songId,
+                  )
                   .toList(),
             ),
       );
