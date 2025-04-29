@@ -41,7 +41,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
           data: (data) {
             showSnackBar(
               context,
-              'Account created successfully! Please  login.',
+              'Account created successfully! Please login.',
             );
             Navigator.push(
               context,
